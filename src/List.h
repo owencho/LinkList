@@ -11,5 +11,7 @@ struct List{
 };
 void initList(List * link, ListItem * head ,ListItem * tail ,int count ,ListItem * current);
 void resetCurrentListItem(List * node);
-void * getNextListItem(List * node);
+ListItem * getNextListItem(List * linkList);
+List*  addListItem(List * linkList, ListItem * item );
+List* deleteListItem(List * linkList);
 #endif // _LIST_H

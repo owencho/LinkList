@@ -8,6 +8,6 @@ void initNetworkNode(NetworkNode * node, char*name,List * links){
     node-> links = links;
 }
 
-ListItem * getIteratorOfLinks(NetworkNode * node){
+List * getIteratorOfLinks(NetworkNode * node){
     return node->links;
 }
