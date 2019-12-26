@@ -8,8 +8,8 @@ void initList(List * link, ListItem * head ,ListItem * tail ,int count ,ListItem
     link->current = current;
 }
 
-void resetCurrentListItem(List * node){
-    node->current = node->head;
+void resetCurrentListItem(List * linkList){
+    linkList->current = linkList->head;
 }
 
 ListItem * getNextListItem(List * linkList){
@@ -39,13 +39,13 @@ List* addListItem(List * linkList, ListItem * item ){
 
 List* deleteListItem(List * linkList){
     ListItem * nextListItem;
-    nextListItem = linkList->head->next;
     if(linkList->head ==NULL)
         return linkList;
-    if(linkList->current == linkList->head)
-        linkList->current = linkList->head->next;
+    nextListItem = linkList->head->next;
+    if(linkList->current == linkList->head)  //if current is point to head
+        linkList->current = nextListItem;   // also change current as the head is deleted
     if(nextListItem == NULL)
-        linkList->tail = NULL;
+        linkList->tail = NULL;             // if last item deleted , the tail also points to NULL
     linkList->head = nextListItem;
     linkList->count--;
     return linkList;

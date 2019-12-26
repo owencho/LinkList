@@ -10,7 +10,7 @@ struct List{
     ListItem * current ;
 };
 void initList(List * link, ListItem * head ,ListItem * tail ,int count ,ListItem * current);
-void resetCurrentListItem(List * node);
+void resetCurrentListItem(List * linkList);
 ListItem * getNextListItem(List * linkList);
 List*  addListItem(List * linkList, ListItem * item );
 List* deleteListItem(List * linkList);
