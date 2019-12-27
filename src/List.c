@@ -1,13 +1,7 @@
 #include "List.h"
 #include <stdlib.h>
 #include <stdio.h>
-void initList(List * link, ListItem * head ,ListItem * tail ,int count ,ListItem * current){
-    link->head = head;
-    link->tail = tail;
-    link->count = count;
-    link->current = current;
-    //move to test
-}
+
 
 void resetCurrentListItem(List * linkList){
     linkList->current = linkList->head;
@@ -24,7 +18,7 @@ ListItem * getNextListItem(List * linkList){
 
 }
 
-List* addListItem(List * linkList, ListItem * item ){
+List* listAddItemToTail(List * linkList, ListItem * item ){
     item->next = NULL;
     if(linkList->head == NULL){
         linkList->head = item;
@@ -34,6 +28,21 @@ List* addListItem(List * linkList, ListItem * item ){
         linkList->tail->next = item;
     }
     linkList->tail = item;
+    linkList->count++;
+    return linkList;
+}
+
+List* listAddItemToHead(List * linkList, ListItem * item ){
+    item->next = NULL;
+    if(linkList->head == NULL){
+        linkList->head = item;
+        linkList->current = item;
+        linkList->tail = item;
+    }
+    else{
+        item->next = linkList->head;
+        linkList->head = item;
+    }
     linkList->count++;
     return linkList;
 }

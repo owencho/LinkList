@@ -8,5 +8,4 @@ struct ListItem{
     void * data ;
 };
 
-void initListItem(ListItem * listItem, ListItem * next ,void* data);
 #endif // _LISTITEM_H

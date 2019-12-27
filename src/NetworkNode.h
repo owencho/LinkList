@@ -19,6 +19,5 @@ struct Link{
 };
 
 char* getNodeName(NetworkNode * node);
-void initNetworkNode(NetworkNode * node, char*name,List * links);
 List * getIteratorOfLinks(NetworkNode * node);
 #endif // _NETWORKNODE_H
