@@ -6,6 +6,7 @@ void initList(List * link, ListItem * head ,ListItem * tail ,int count ,ListItem
     link->tail = tail;
     link->count = count;
     link->current = current;
+    //move to test
 }
 
 void resetCurrentListItem(List * linkList){

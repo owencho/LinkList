@@ -7,6 +7,7 @@ typedef struct NetworkNode NetworkNode ;
 struct NetworkNode{
     char* name;
     List * links ;
+    int marked; // used for shortestPath
 };
 
 typedef struct Link Link ;

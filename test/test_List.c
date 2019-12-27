@@ -35,7 +35,7 @@ void test_List_resetList_NULL(void){
 void test_List_getNextListItem(void){
     initListItem(&itemA,&itemB,(void*)&linkItemDataA);
     initListItem(&itemB,NULL,(void*)&linkItemDataB);
-    initList(&linkList, &itemA ,&itemB ,0 ,&itemA);
+    initList(&linkList, &itemA ,&itemB ,0 ,&itemA);//er
     //Link list with itemA as head and itemB as tail
     // getNextListItem will return the first listitem(listitemA)
     outputListItem=getNextListItem(&linkList);
@@ -43,6 +43,9 @@ void test_List_getNextListItem(void){
     // getNextListItem will return the second listitem(listitemB)
     outputListItem=getNextListItem(&linkList);
     TEST_ASSERT_EQUAL_PTR(&itemB,outputListItem);
+    // getNextListItem will return NULL as nextItem is empty
+    outputListItem=getNextListItem(&linkList);
+    TEST_ASSERT_NULL(outputListItem);
 }
 
 /*
@@ -51,7 +54,7 @@ void test_List_getNextListItem(void){
 *
 */
 void test_List_getNextListItem_second_item_is_NULL(void){
-    initListItem(&itemA,NULL,(void*)&linkItemDataA);;
+    initListItem(&itemA,NULL,(void*)&linkItemDataA);
     initList(&linkList, &itemA ,&itemA ,0 ,&itemA);
     //Link list with itemA as head and tail
     // getNextListItem will return the first listitem(listitemA)
