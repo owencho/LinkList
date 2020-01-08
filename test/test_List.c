@@ -26,6 +26,15 @@ void initListItem(ListItem * listItem, ListItem * next ,void* data){
     listItem->data = data;
 }
 
+void test_List_createList(void){
+    outList = createList();
+    //createList will malloc for List 
+    TEST_ASSERT_NULL(outList->head);
+    TEST_ASSERT_NULL(outList->tail);
+    TEST_ASSERT_NULL(outList->current);
+    TEST_ASSERT_NULL(outList->previous);
+    TEST_ASSERT_EQUAL_PTR(0,outList->count);
+}
 void test_List_resetList(void){
     initListItem(&itemA, &itemB ,(void*)&linkItemDataA);
     initList(&linkList, &itemA ,&itemB ,0 ,&itemB);

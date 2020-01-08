@@ -11,7 +11,7 @@ struct List{
     ListItem * previous;
     ListItem * current ;
 };
-
+List * createList(void);
 void resetCurrentListItem(List * linkList);
 ListItem * getCurrentListItem(List * linkList);
 ListItem * getNextListItem(List * linkList);

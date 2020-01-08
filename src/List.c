@@ -2,7 +2,17 @@
 #include "LinkCompare.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
+List *createList(void){
+    List * list = (List *)malloc(sizeof(List));
+    list->head = NULL;
+    list->tail = NULL;
+    list->current = NULL;
+    list->count = 0;
+    list->previous = NULL;
+    return list;
+}
 
 void resetCurrentListItem(List * linkList){
     linkList->current = linkList->head;
