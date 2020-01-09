@@ -35,36 +35,42 @@ ListItem * getNextListItem(List * linkList){
 
 }
 
-List* listAddItemToTail(List * linkList, ListItem * item ){
-    item->next = NULL;
+List* listAddItemToTail(List * linkList, void * data ){
+    ListItem * listItem = (ListItem *)malloc(sizeof(ListItem));
+    listItem->next = NULL;
+    listItem->data = data;
     if(linkList->head == NULL){
-        linkList->head = item;
-        linkList->current = item;
+        linkList->head = listItem;
+        linkList->current = listItem;
         linkList->previous = NULL;
     }
     else{
-        linkList->tail->next = item;
+        linkList->tail->next = listItem;
     }
-    linkList->tail = item;
+    linkList->tail = listItem;
     linkList->count++;
+    resetCurrentListItem(linkList);
     return linkList;
 }
 
-List* listAddItemToHead(List * linkList, ListItem * item ){
-    item->next = NULL;
+List* listAddItemToHead(List * linkList, void * data ){
+    ListItem * listItem = (ListItem *)malloc(sizeof(ListItem));
+    listItem->next = NULL;
+    listItem->data = data;
     if(linkList->head == NULL){
-        linkList->head = item;
-        linkList->current = item;
-        linkList->tail = item;
+        linkList->head = listItem;
+        linkList->current = listItem;
+        linkList->tail = listItem;
         linkList->previous = NULL;
     }
     else{
         if(linkList->current == linkList->head)
             linkList->previous = NULL;
-        item->next = linkList->head;
-        linkList->head = item;
+        listItem->next = linkList->head;
+        linkList->head = listItem;
     }
     linkList->count++;
+    resetCurrentListItem(linkList);
     return linkList;
 }
 

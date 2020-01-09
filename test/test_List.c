@@ -28,7 +28,7 @@ void initListItem(ListItem * listItem, ListItem * next ,void* data){
 
 void test_List_createList(void){
     outList = createList();
-    //createList will malloc for List 
+    //createList will malloc for List
     TEST_ASSERT_NULL(outList->head);
     TEST_ASSERT_NULL(outList->tail);
     TEST_ASSERT_NULL(outList->current);
@@ -118,22 +118,34 @@ void test_List_listAddItemToTail(void){
     //empty linklist add itemA
     // head ,tail and current points to itemA
     // count = 1 as 1 item inside
-    outList=listAddItemToTail(&linkList,&itemA);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->head);
-    TEST_ASSERT_NULL(itemA.next);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
+    outList=listAddItemToTail(&linkList,(void*)&linkItemDataA);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
     TEST_ASSERT_EQUAL(1,outList->count);
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
+
     //linklist add itemB
     // head and current points to itemA
     // tail now points to itemB
     // count = 2 as 2 item inside
-    outList=listAddItemToTail(&linkList,&itemB);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemB,itemA.next);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
+    outList=listAddItemToTail(&linkList,(void*)&linkItemDataB);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
     TEST_ASSERT_EQUAL(2,outList->count);
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataB);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
+
 }
 
 /*
@@ -152,25 +164,36 @@ void test_List_listAddItemToTail_addC(void){
     // head and current points to itemA
     // tail now points to itemB
     // count = 2 as 2 item inside
-    outList=listAddItemToTail(&linkList,&itemB);
-    TEST_ASSERT_EQUAL_PTR(&itemB,itemA.next);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemB,itemA.next);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
+    outList=listAddItemToTail(&linkList,(void*)&linkItemDataB);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
     TEST_ASSERT_EQUAL(2,outList->count);
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataB);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
     //linklist add itemC
     // head and current points to itemA
     // tail now points to itemC
     // count = 3 as 3 item inside
-    outList=listAddItemToTail(&linkList,&itemC);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->head);
-    TEST_ASSERT_NULL(itemC.next);
-    TEST_ASSERT_EQUAL_PTR(&itemC,itemB.next);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
+    outList=listAddItemToTail(&linkList,(void*)&linkItemDataC);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataC,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
     TEST_ASSERT_EQUAL(3,outList->count);
-
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataB);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataC);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
 }
 
 /*
@@ -188,24 +211,38 @@ void test_List_listAddItemToHead(void){
     //linklist add itemB
     // head points to itemB
     // count = 2 as 2 item inside
-    outList=listAddItemToHead(&linkList,&itemB);
-    TEST_ASSERT_EQUAL_PTR(&itemA,itemB.next);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
+    outList=listAddItemToHead(&linkList,(void*)&linkItemDataB);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outList->current->data);
     TEST_ASSERT_EQUAL(2,outList->count);
-    TEST_ASSERT_NULL(itemA.next);
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataB);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
+
     //linklist add itemC
     // head points to itemC
     // count = 3 as 3 item inside
-    outList=listAddItemToHead(&linkList,&itemC);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
-    TEST_ASSERT_EQUAL_PTR(&itemB,itemC.next);
-    TEST_ASSERT_EQUAL_PTR(&itemA,itemB.next);
+
+    outList=listAddItemToHead(&linkList,(void*)&linkItemDataC);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataC,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataC,outList->current->data);
     TEST_ASSERT_EQUAL(3,outList->count);
-    TEST_ASSERT_NULL(itemA.next);
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataC);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataB);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
+
 
 }
 
