@@ -12,12 +12,13 @@ struct List{
     ListItem * current ;
 };
 List * createList(void);
-void resetCurrentListItem(List * linkList);
-ListItem * getCurrentListItem(List * linkList);
-ListItem * getNextListItem(List * linkList);
-List*  listAddItemToHead(List * linkList, void * data );
-List*  listAddItemToTail(List * linkList, void * data );
-List* deleteHeadListItem(List * linkList);
-List* deleteSelectedListItem(List * linkList,void  * listItemData,LinkListCompare compare);
-List* checkAndDeleteListItem(List * linkList,ListItem * deleteListItem);
+void resetCurrentListItem(List * linkedList);
+ListItem * getCurrentListItem(List * linkedList);
+ListItem * getNextListItem(List * linkedList);
+List*  listAddItemToHead(List * linkedList, void * data );
+List*  listAddItemToTail(List * linkedList, void * data );
+List* deleteHeadListItem(List * linkedList);
+ListItem * findListItem(List * linkedList,void * listItemData,LinkListCompare compare );
+List* deleteSelectedListItem(List * linkedList,void  * listItemData,LinkListCompare compare);
+List* checkAndDeleteListItem(List * linkedList,ListItem * deleteListItem);
 #endif // _LIST_H
