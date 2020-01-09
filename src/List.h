@@ -11,6 +11,9 @@ struct List{
     ListItem * previous;
     ListItem * current ;
 };
+
+typedef void (*Processor)(ListItem * data);
+
 List * createList(void);
 void resetCurrentListItem(List * linkedList);
 ListItem * getCurrentListItem(List * linkedList);
@@ -21,4 +24,5 @@ List* deleteHeadListItem(List * linkedList);
 ListItem * findListItem(List * linkedList,void * listItemData,LinkedListCompare compare );
 List* deleteSelectedListItem(List * linkedList,void  * listItemData,LinkedListCompare compare);
 List* checkAndDeleteListItem(List * linkedList,ListItem * deleteListItem);
+void listForEach(List *linkedList,Processor processor);
 #endif // _LIST_H

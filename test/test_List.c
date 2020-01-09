@@ -14,6 +14,10 @@ ListItem*outputListItem;
 void setUp(void){}
 void tearDown(void){}
 
+void printLinkSourceProcessor(ListItem * data){
+    Link *
+}
+
 void initList(List * link, ListItem * head ,ListItem * tail ,int count ,ListItem * current){
     link->head = head;
     link->tail = tail;
