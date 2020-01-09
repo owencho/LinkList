@@ -1,6 +1,6 @@
 #include "unity.h"
 #include "LinkCompare.h"
-#include "LinkListCompare.h"
+#include "LinkedListCompare.h"
 Link  dataA;
 Link  dataB;
 int   compareValue;

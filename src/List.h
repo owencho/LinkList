@@ -1,7 +1,7 @@
 #ifndef _LIST_H
 #define _LIST_H
 #include "ListItem.h"
-#include "LinkListCompare.h"
+#include "LinkedListCompare.h"
 typedef struct List List ;
 
 struct List{
@@ -18,7 +18,7 @@ ListItem * getNextListItem(List * linkedList);
 List*  listAddItemToHead(List * linkedList, void * data );
 List*  listAddItemToTail(List * linkedList, void * data );
 List* deleteHeadListItem(List * linkedList);
-ListItem * findListItem(List * linkedList,void * listItemData,LinkListCompare compare );
-List* deleteSelectedListItem(List * linkedList,void  * listItemData,LinkListCompare compare);
+ListItem * findListItem(List * linkedList,void * listItemData,LinkedListCompare compare );
+List* deleteSelectedListItem(List * linkedList,void  * listItemData,LinkedListCompare compare);
 List* checkAndDeleteListItem(List * linkedList,ListItem * deleteListItem);
 #endif // _LIST_H

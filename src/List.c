@@ -88,7 +88,7 @@ List* deleteHeadListItem(List * linkedList){
     return linkedList;
 }
 
-List* deleteSelectedListItem(List * linkedList,void  * listItemData,LinkListCompare compare){
+List* deleteSelectedListItem(List * linkedList,void  * listItemData,LinkedListCompare compare){
     ListItem * listItem;
     if(linkedList->head ==NULL)
         return linkedList;
@@ -99,7 +99,7 @@ List* deleteSelectedListItem(List * linkedList,void  * listItemData,LinkListComp
     return linkedList;
 }
 
-ListItem * findListItem(List * linkedList,void * listItemData,LinkListCompare compare ){
+ListItem * findListItem(List * linkedList,void * listItemData,LinkedListCompare compare ){
     int size;
     ListItem * nextListItem;
     if(linkedList==NULL)

@@ -1,6 +1,6 @@
 #include "unity.h"
 #include "ListItemCompare.h"
-#include "LinkListCompare.h"
+#include "LinkedListCompare.h"
 ListItem  dataA;
 ListItem  dataB;
 int   compareValue;

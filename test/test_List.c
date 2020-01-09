@@ -3,7 +3,7 @@
 #include "List.h"
 #include "ListItem.h"
 #include "ListItemCompare.h"
-#include "LinkListCompare.h"
+#include "LinkedListCompare.h"
 #include "LinkCompare.h"
 NetworkNode node;
 List linkedList;
@@ -300,7 +300,7 @@ void test_List_findListItem(void){
     initListItem(&itemA,&itemB,(void*)&linkItemDataA);
     initListItem(&itemB,NULL,(void*)&linkItemDataB);
 
-    outputListItem=findListItem(&linkedList,&itemB,(LinkListCompare)ListItemCompare);
+    outputListItem=findListItem(&linkedList,&itemB,(LinkedListCompare)ListItemCompare);
     TEST_ASSERT_EQUAL_PTR(&itemB,outputListItem);
 }
 
@@ -313,7 +313,7 @@ void test_List_findListItem_linkedList_couldnt_found_the_node(void){
     initListItem(&itemA,&itemB,(void*)&linkItemDataA);
     initListItem(&itemB,NULL,(void*)&linkItemDataB);
 
-    outputListItem=findListItem(&linkedList,&itemC,(LinkListCompare)ListItemCompare);
+    outputListItem=findListItem(&linkedList,&itemC,(LinkedListCompare)ListItemCompare);
     TEST_ASSERT_NULL(outputListItem);
 }
 
@@ -326,7 +326,7 @@ void test_List_findListItem_linkedList_NULL(void){
     initListItem(&itemA,&itemB,(void*)&linkItemDataA);
     initListItem(&itemB,NULL,(void*)&linkItemDataB);
 
-    outputListItem=findListItem(NULL,&itemB,(LinkListCompare)ListItemCompare);
+    outputListItem=findListItem(NULL,&itemB,(LinkedListCompare)ListItemCompare);
     TEST_ASSERT_NULL(outputListItem);
 }
 /*
@@ -404,7 +404,7 @@ void test_List_deleteSelectedListItem_delete_middle(void){
     initListItem(&itemB,&itemA,(void*)&linkItemDataB);
     initListItem(&itemC,&itemB,(void*)&linkItemDataC);
 
-    outList=deleteSelectedListItem(&linkedList,&itemB,(LinkListCompare)ListItemCompare);
+    outList=deleteSelectedListItem(&linkedList,&itemB,(LinkedListCompare)ListItemCompare);
     TEST_ASSERT_EQUAL_PTR(&itemC,outList->head);
     TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
     TEST_ASSERT_EQUAL_PTR(&itemC,outList->current);
@@ -432,7 +432,7 @@ void test_List_deleteSelectedListItem_delete_front(void){
     initListItem(&itemB,&itemA,(void*)&linkItemDataB);
     initListItem(&itemC,&itemB,(void*)&linkItemDataC);
 
-    outList=deleteSelectedListItem(&linkedList,&itemC,(LinkListCompare)ListItemCompare);
+    outList=deleteSelectedListItem(&linkedList,&itemC,(LinkedListCompare)ListItemCompare);
     TEST_ASSERT_EQUAL_PTR(&itemB,outList->head);
     TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
     TEST_ASSERT_EQUAL_PTR(&itemB,outList->current);
@@ -460,7 +460,7 @@ void test_List_deleteSelectedListItem_delete_last(void){
     initListItem(&itemB,&itemA,(void*)&linkItemDataB);
     initListItem(&itemC,&itemB,(void*)&linkItemDataC);
 
-    outList=deleteSelectedListItem(&linkedList,&itemA,(LinkListCompare)ListItemCompare);
+    outList=deleteSelectedListItem(&linkedList,&itemA,(LinkedListCompare)ListItemCompare);
     TEST_ASSERT_EQUAL_PTR(&itemC,outList->head);
     TEST_ASSERT_EQUAL_PTR(&itemB,outList->tail);
     TEST_ASSERT_EQUAL_PTR(&itemC,outList->current);
