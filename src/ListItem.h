@@ -8,4 +8,6 @@ struct ListItem{
     void * data ;
 };
 
+#define freeListItem(listItem)                                      \
+                          do{if(listItem) free(listItem);}while(0)
 #endif // _LISTITEM_H
