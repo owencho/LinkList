@@ -1,5 +1,0 @@
-#ifndef _CUSTOMASSERT_H
-#define _CUSTOMASSERT_H
-
-
-#endif // _CUSTOMASSERT_H

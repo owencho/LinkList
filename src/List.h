@@ -16,12 +16,13 @@ struct List{
 
 List * createList(void);
 void resetCurrentListItem(List * linkedList);
+ListItem *createListItem(void* data);
 ListItem * getCurrentListItem(List * linkedList);
 ListItem * getNextListItem(List * linkedList);
 List*  listAddItemToHead(List * linkedList, void * data );
 List*  listAddItemToTail(List * linkedList, void * data );
-List* deleteHeadListItem(List * linkedList);
 ListItem * findListItem(List * linkedList,void * listItemData,LinkedListCompare compare );
+void * deleteHeadListItem(List * linkedList);
 void * deleteSelectedListItem(List * linkedList,void  * listItemData,LinkedListCompare compare);
 void * checkAndDeleteListItem(List * linkedList,ListItem * deleteListItem);
 void listForEach(List *linkedList,Processor processor);

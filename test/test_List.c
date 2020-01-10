@@ -10,12 +10,14 @@
 NetworkNode node;
 List linkedList;
 ListItem  itemA,itemB,itemC;
+ListItem * listItemA;
+ListItem *listItemB;
+ListItem *listItemC;
 Link  linkItemDataA,linkItemDataB,linkItemDataC;
+Link * outputLink;
 List* outList;
 ListItem*outputListItem;
-void setUp(void){
-
-}
+void setUp(void){}
 void tearDown(void){}
 
 
@@ -32,6 +34,23 @@ void initListItem(ListItem * listItem, ListItem * next ,void* data){
     listItem->data = data;
 }
 
+List* createLinkList(ListItem * head ,ListItem * tail ,int count ,ListItem * current,ListItem * previous){
+    List * list = (List *)malloc(sizeof(List));
+    list->head = head;
+    list->tail = tail;
+    list->count = count;
+    list->current = current;
+    list->previous =previous;
+    return list;
+}
+
+ListItem *createListItemTest(ListItem * next ,void* data){
+    ListItem * listItem = (ListItem *)malloc(sizeof(ListItem));
+    listItem->next = next;
+    listItem->data = data;
+    return listItem;
+}
+
 void test_List_createList(void){
     outList = createList();
     //createList will malloc for List
@@ -40,8 +59,25 @@ void test_List_createList(void){
     TEST_ASSERT_NULL(outList->current);
     TEST_ASSERT_NULL(outList->previous);
     TEST_ASSERT_EQUAL_PTR(0,outList->count);
-    freeList(list);
+    freeList(outList);
 }
+
+void test_List_createListItem_without_data(void){
+    outputListItem = createListItem(NULL);
+    //createListItem will malloc for ListItem
+    TEST_ASSERT_NULL(outputListItem->next);
+    TEST_ASSERT_NULL(outputListItem->data);
+    freeListItem(outputListItem);
+}
+
+void test_List_createListItem_with_data(void){
+    outputListItem = createListItem((void*)&linkItemDataA);
+    //createListItem will malloc for ListItem
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outputListItem->data);
+    TEST_ASSERT_NULL(outputListItem->next);
+    freeListItem(outputListItem);
+}
+
 
 void test_List_resetList(void){
     initListItem(&itemA, &itemB ,(void*)&linkItemDataA);
@@ -241,6 +277,7 @@ void test_List_listAddItemToTail_data_NULL(void){
     TEST_ASSERT_NULL(outList->previous);
     TEST_ASSERT_EQUAL(1,outList->count);
 }
+
 void test_List_listAddItemToTail_both_input_NULL(void){
     outList=listAddItemToTail(NULL,NULL);
     TEST_ASSERT_NULL(outList);
@@ -255,18 +292,18 @@ void test_List_listAddItemToHead_linkedList_is_NULL(void){
     TEST_ASSERT_NULL(outList);
 }
 
-void test_List_listAddItemToHead_linkedList_is_NULL(void){
-  initList(&linkedList, &itemA ,&itemA ,1 ,&itemA);
-  initListItem(&itemB,NULL,(void*)&linkItemDataB);
-  initListItem(&itemA,NULL,(void*)&linkItemDataA);
-  initListItem(&itemC,NULL,(void*)&linkItemDataC);
+void test_List_listAddItemToHead_linkedListData_is_NULL(void){
+    initList(&linkedList, &itemA ,&itemA ,1 ,&itemA);
+    initListItem(&itemB,NULL,(void*)&linkItemDataB);
+    initListItem(&itemA,NULL,(void*)&linkItemDataA);
+    initListItem(&itemC,NULL,(void*)&linkItemDataC);
 
-  outList=listAddItemToHead(&linkedList,NULL);
-  TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
-  TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->tail->data);
-  TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
-  TEST_ASSERT_NULL(outList->previous);
-  TEST_ASSERT_EQUAL(1,outList->count);
+    outList=listAddItemToHead(&linkedList,NULL);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
+    TEST_ASSERT_NULL(outList->previous);
+    TEST_ASSERT_EQUAL(1,outList->count);
 }
 /*
 *   linkedList -> itemA -> NULL
@@ -354,33 +391,36 @@ void test_List_listAddItemToHead(void){
 *   linkedList -> NULL
 */
 void test_List_deleteHeadListItem(void){
-    initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
-    initListItem(&itemA,&itemB,(void*)&linkItemDataA);
-    initListItem(&itemB,NULL,(void*)&linkItemDataB);
+    listItemB = createListItemTest(NULL ,(void*)&linkItemDataB);
+    listItemA = createListItemTest(listItemB ,(void*)&linkItemDataA);
+    outList = createLinkList(listItemA ,listItemB ,2 ,listItemA,NULL);
     //linkedList with itemA and itemB
     //delete itemA
     // head and current points to itemB
     // tail points to itemB
     // count = 1 as 1 item inside
-    outList=(deleteHeadListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemB,linkedList.head);
-    TEST_ASSERT_EQUAL_PTR(&itemB,linkedList.tail);
-    TEST_ASSERT_EQUAL_PTR(&itemB,linkedList.current);
+    outputLink=(Link*)deleteHeadListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outputLink);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->head);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->tail);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->current);
     TEST_ASSERT_NULL(outList->previous);
     TEST_ASSERT_EQUAL(1,outList->count);
     //linkedList delete itemB
     // head and current points to NULL
     // tail now points to NULL
     // count = 0 as 0 item inside
-    outList=deleteHeadListItem(&linkedList);
+    outputLink=(Link*)deleteHeadListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outputLink);
     TEST_ASSERT_NULL(outList->head);
     TEST_ASSERT_NULL(outList->tail);
     TEST_ASSERT_NULL(outList->current);
     TEST_ASSERT_NULL(outList->previous);
     TEST_ASSERT_EQUAL(0,outList->count);
+    freeList(outList);
 }
 
-void test_List_deleteListItem_linkedList_NULL(void){
+void test_List_deleteHeadListItemlinkedList_NULL(void){
     initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
     initListItem(&itemA,&itemB,(void*)&linkItemDataA);
     initListItem(&itemB,NULL,(void*)&linkItemDataB);
@@ -389,24 +429,245 @@ void test_List_deleteListItem_linkedList_NULL(void){
     // head and current points to itemB
     // tail points to itemB
     // count = 1 as 1 item inside
-    outList=deleteHeadListItem(NULL);
-    TEST_ASSERT_NULL(outList);
+    outputLink=(Link*)deleteHeadListItem(NULL);
+    TEST_ASSERT_NULL(outputLink);
 }
 
 /*
 *   linkedList -> NULL
 */
-void test_List_deleteListItem_NULL(void){
+void test_List_deleteHeadListItem_NULL(void){
     initList(&linkedList, NULL ,NULL ,0 ,NULL );
     //linkedList delete but item has nothing
     // count = 0 as 0 item inside
-    outList=deleteHeadListItem(&linkedList);
-    TEST_ASSERT_NULL(outList->head);
-    TEST_ASSERT_NULL(outList->tail);
-    TEST_ASSERT_NULL(outList->current);
-    TEST_ASSERT_NULL(outList->previous);
-    TEST_ASSERT_EQUAL(0,outList->count);
+    outputLink=(Link*)deleteHeadListItem(&linkedList);
+    TEST_ASSERT_NULL(outputLink);
 }
+////checkAndDeleteListItem//////////////////////////
+//This function is to check the location of the deleted node
+// when this function called the deleted linkItem is already found
+// it is used to determine where is the location of the linkItem and delete
+// either is head , tail or middle of linkedList
+
+void test_List_checkAndDeleteListItem_linkedList_NULL(void){
+    initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
+    initListItem(&itemA,&itemB,(void*)&linkItemDataA);
+    initListItem(&itemB,NULL,(void*)&linkItemDataB);
+
+    outputLink=(Link*)checkAndDeleteListItem(NULL,&itemA);
+    TEST_ASSERT_NULL(outputLink);
+}
+
+void test_List_checkAndDeleteListItem_deleteListItem_NULL(void){
+    initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
+    initListItem(&itemA,&itemB,(void*)&linkItemDataA);
+    initListItem(&itemB,NULL,(void*)&linkItemDataB);
+
+    outputLink=(Link*)checkAndDeleteListItem(&linkedList,NULL);
+    TEST_ASSERT_EQUAL_PTR(&itemA,linkedList.head);
+    TEST_ASSERT_EQUAL_PTR(&itemB,linkedList.tail);
+    TEST_ASSERT_EQUAL_PTR(&itemA,linkedList.current);
+    TEST_ASSERT_EQUAL(2,linkedList.count);
+    TEST_ASSERT_NULL(outputLink);
+}
+/*
+*    linkedList -> itemA -> itemB -> NULL
+*          ↓ deleteA
+*   linkedList -> itemB -> NULL
+*/
+void test_List_checkAndDeleteListItem_delete_firstNode(void){
+    listItemB = createListItemTest(NULL ,(void*)&linkItemDataB);
+    listItemA = createListItemTest(listItemB ,(void*)&linkItemDataA);
+    outList = createLinkList(listItemA ,listItemB ,2 ,listItemA,NULL);
+    //current must points to itemA first before check the location of node and delete
+    outputLink=(Link*)checkAndDeleteListItem(outList,listItemA);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outputLink);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->head);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->tail);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->current);
+    TEST_ASSERT_EQUAL(1,outList->count);
+    freeList(outList);
+    freeListItem(listItemB);
+}
+
+/*
+*    linkedList -> itemA -> itemB -> NULL
+*          ↓ deleteB
+*   linkedList -> itemA -> NULL
+*/
+void test_List_checkAndDeleteListItem_delete_tail(void){
+    listItemB = createListItemTest(NULL ,(void*)&linkItemDataB);
+    listItemA = createListItemTest(listItemB ,(void*)&linkItemDataA);
+    outList = createLinkList(listItemA ,listItemB ,2 ,listItemA,NULL);
+    //current must points to itemB first before check the location of node and delete
+    outputListItem=getNextListItem(outList);
+    outputLink=(Link*)checkAndDeleteListItem(outList,listItemB);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outputLink);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outList->head);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outList->tail);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outList->current);
+    TEST_ASSERT_EQUAL(1,outList->count);
+    freeList(outList);
+    freeListItem(listItemA);
+
+}
+
+/*
+*    linkedList -> itemC -> itemB -> itemA -> NULL
+*          ↓ delete itemB
+*    linkedList -> itemC -> itemA -> NULL
+*
+*/
+void test_List_checkAndDeleteListItem_delete_middle(void){
+    listItemA = createListItemTest(NULL ,(void*)&linkItemDataA);
+    listItemB = createListItemTest(listItemA ,(void*)&linkItemDataB);
+    listItemC = createListItemTest(listItemB ,(void*)&linkItemDataC);
+    outList = createLinkList(listItemC,listItemA ,3 ,listItemC,NULL);
+    //current must points to itemB first before check the location of node and delete
+    outputListItem=getNextListItem(outList);
+    outputLink=(Link*)checkAndDeleteListItem(outList,listItemB);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outputLink);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outList->head);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outList->tail);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outList->current);
+    TEST_ASSERT_EQUAL(2,outList->count);
+
+    outputListItem=getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outputListItem);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outputListItem);
+    TEST_ASSERT_NULL(outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+
+    freeList(outList);
+    freeListItem(listItemC);
+    freeListItem(listItemA);
+}
+
+
+////Delete Selected item//////////////////////////////////////////////////////////////
+
+/*
+*    linkedList -> itemC -> itemB -> itemA -> NULL
+*          ↓ delete itemB
+*    linkedList -> itemC -> itemA -> NULL
+*
+*/
+void test_List_deleteSelectedListItem_delete_middle(void){
+    listItemA = createListItemTest(NULL ,(void*)&linkItemDataA);
+    listItemB = createListItemTest(listItemA ,(void*)&linkItemDataB);
+    listItemC = createListItemTest(listItemB ,(void*)&linkItemDataC);
+    outList = createLinkList(listItemC,listItemA ,3 ,listItemC,NULL);
+
+    outputLink=(Link*)deleteSelectedListItem(outList,listItemB,(LinkedListCompare)ListItemCompare);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outputLink);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outList->head);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outList->tail);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outList->current);
+    TEST_ASSERT_EQUAL(2,outList->count);
+    outputListItem=getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outputListItem);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outputListItem);
+    TEST_ASSERT_NULL(outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+
+    freeList(outList);
+    freeListItem(listItemC);
+    freeListItem(listItemA);
+}
+
+/*
+*    linkedList -> itemC -> itemB -> itemA -> NULL
+*          ↓ delete itemC
+*    linkedList -> itemB -> itemA -> NULL
+*
+*/
+void test_List_deleteSelectedListItem_delete_front(void){
+    listItemA = createListItemTest(NULL ,(void*)&linkItemDataA);
+    listItemB = createListItemTest(listItemA ,(void*)&linkItemDataB);
+    listItemC = createListItemTest(listItemB ,(void*)&linkItemDataC);
+    outList = createLinkList(listItemC,listItemA ,3 ,listItemC,NULL);
+
+    outputLink=(Link*)deleteSelectedListItem(outList,listItemC,(LinkedListCompare)ListItemCompare);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataC,outputLink);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->head);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outList->tail);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->current);
+    TEST_ASSERT_EQUAL(2,outList->count);
+    outputListItem=getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outputListItem);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemA,outputListItem);
+    TEST_ASSERT_NULL(outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+
+    freeList(outList);
+    freeListItem(listItemB);
+    freeListItem(listItemA);
+}
+
+/*
+*    linkedList -> itemC -> itemB -> itemA -> NULL
+*          ↓ delete itemA
+*    linkedList -> itemC -> itemB -> NULL
+*
+*/
+void test_List_deleteSelectedListItem_delete_last(void){
+    listItemA = createListItemTest(NULL ,(void*)&linkItemDataA);
+    listItemB = createListItemTest(listItemA ,(void*)&linkItemDataB);
+    listItemC = createListItemTest(listItemB ,(void*)&linkItemDataC);
+    outList = createLinkList(listItemC,listItemA ,3 ,listItemC,NULL);
+
+    outputLink=(Link*)deleteSelectedListItem(outList,listItemA,(LinkedListCompare)ListItemCompare);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outputLink);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outList->head);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outList->tail);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outList->current);
+    TEST_ASSERT_EQUAL(2,outList->count);
+    outputListItem=getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemC,outputListItem);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(listItemB,outputListItem);
+    TEST_ASSERT_NULL(outputListItem->next);
+    outputListItem=getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+
+    freeList(outList);
+    freeListItem(listItemC);
+    freeListItem(listItemB);
+}
+
+void test_List_deleteSelectedListItem_LinkList_NULL(void){
+    outputLink=(Link*)deleteSelectedListItem(NULL,listItemA,(LinkedListCompare)ListItemCompare);
+    TEST_ASSERT_NULL(outputLink);
+}
+
+void test_List_deleteSelectedListItem_listItem_NULL(void){
+    outputLink=(Link*)deleteSelectedListItem(outList,NULL,(LinkedListCompare)ListItemCompare);
+    TEST_ASSERT_NULL(outputLink);
+}
+
+void test_List_deleteSelectedListItem_function_pointer_NULL(void){
+    outputLink=(Link*)deleteSelectedListItem(outList,listItemA,NULL);
+    TEST_ASSERT_NULL(outputLink);
+}
+
+void test_List_deleteSelectedListItem_LinkList_empty(void){
+    outList = createLinkList(NULL,NULL ,0 ,NULL,NULL);
+    outputLink=(Link*)deleteSelectedListItem(outList,listItemA,(LinkedListCompare)ListItemCompare);
+    TEST_ASSERT_NULL(outputLink);
+
+    freeList(outList);
+}
+
 /*
 *    linkedList -> itemA -> itemB -> NULL
 *
@@ -451,171 +712,13 @@ void test_List_findListItem_data_NULL(void){
     TEST_ASSERT_NULL(outputListItem);
 }
 
-
-void test_List_checkAndDeleteListItem_linkedList_NULL(void){
+void test_List_findListItem_function_pointer_NULL(void){
     initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
     initListItem(&itemA,&itemB,(void*)&linkItemDataA);
     initListItem(&itemB,NULL,(void*)&linkItemDataB);
 
-    outList=checkAndDeleteListItem(NULL,&itemA);
-    TEST_ASSERT_NULL(outList);
-}
-
-void test_List_checkAndDeleteListItem_deleteListItem_NULL(void){
-    initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
-    initListItem(&itemA,&itemB,(void*)&linkItemDataA);
-    initListItem(&itemB,NULL,(void*)&linkItemDataB);
-
-    outList=checkAndDeleteListItem(&linkedList,NULL);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
-    TEST_ASSERT_EQUAL(2,outList->count);
-}
-/*
-*    linkedList -> itemA -> itemB -> NULL
-*          ↓ deleteA
-*   linkedList -> itemB -> NULL
-*/
-void test_List_checkAndDeleteListItem_delete_firstNode(void){
-    initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
-    initListItem(&itemA,&itemB,(void*)&linkItemDataA);
-    initListItem(&itemB,NULL,(void*)&linkItemDataB);
-
-    outList=checkAndDeleteListItem(&linkedList,&itemA);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->current);
-    TEST_ASSERT_EQUAL(1,outList->count);
-}
-
-/*
-*    linkedList -> itemA -> itemB -> NULL
-*          ↓ deleteB
-*   linkedList -> itemB -> NULL
-*/
-void test_List_checkAndDeleteListItem_delete_tail(void){
-    initList(&linkedList, &itemA ,&itemB ,2 ,&itemA );
-    initListItem(&itemA,&itemB,(void*)&linkItemDataA);
-    initListItem(&itemB,NULL,(void*)&linkItemDataB);
-    //current must points to itemB first before check and delete
-    outputListItem=getNextListItem(&linkedList);
-    outList=checkAndDeleteListItem(&linkedList,&itemB);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->current);
-    TEST_ASSERT_EQUAL(1,outList->count);
-}
-
-/*
-*    linkedList -> itemC -> itemB -> itemA -> NULL
-*          ↓ delete itemB
-*    linkedList -> itemC -> itemA -> NULL
-*
-*/
-void test_List_checkAndDeleteListItem_delete_middle(void){
-    initList(&linkedList, &itemC ,&itemA ,3 ,&itemC);
-    initListItem(&itemA,NULL,(void*)&linkItemDataA);
-    initListItem(&itemB,&itemA,(void*)&linkItemDataB);
-    initListItem(&itemC,&itemB,(void*)&linkItemDataC);
-    //current must points to itemB first before check and delete
-    outputListItem=getNextListItem(&linkedList);
-    outList=checkAndDeleteListItem(&linkedList,&itemB);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->current);
-    TEST_ASSERT_EQUAL(2,outList->count);
-    outputListItem=getCurrentListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outputListItem);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outputListItem);
-    TEST_ASSERT_NULL(outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
+    outputListItem=findListItem(&linkedList,&itemB,NULL);
     TEST_ASSERT_NULL(outputListItem);
-}
-/*
-*    linkedList -> itemC -> itemB -> itemA -> NULL
-*          ↓ delete itemB
-*    linkedList -> itemC -> itemA -> NULL
-*
-*/
-void test_List_deleteSelectedListItem_delete_middle(void){
-    initList(&linkedList, &itemC ,&itemA ,3 ,&itemC);
-    initListItem(&itemA,NULL,(void*)&linkItemDataA);
-    initListItem(&itemB,&itemA,(void*)&linkItemDataB);
-    initListItem(&itemC,&itemB,(void*)&linkItemDataC);
-
-    outList=deleteSelectedListItem(&linkedList,&itemB,(LinkedListCompare)ListItemCompare);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->current);
-    TEST_ASSERT_EQUAL(2,outList->count);
-    outputListItem=getCurrentListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outputListItem);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outputListItem);
-    TEST_ASSERT_NULL(outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
-    TEST_ASSERT_NULL(outputListItem);
-
-}
-
-/*
-*    linkedList -> itemC -> itemB -> itemA -> NULL
-*          ↓ delete itemC
-*    linkedList -> itemB -> itemA -> NULL
-*
-*/
-void test_List_deleteSelectedListItem_delete_front(void){
-    initList(&linkedList, &itemC ,&itemA ,3 ,&itemC);
-    initListItem(&itemA,NULL,(void*)&linkItemDataA);
-    initListItem(&itemB,&itemA,(void*)&linkItemDataB);
-    initListItem(&itemC,&itemB,(void*)&linkItemDataC);
-
-    outList=deleteSelectedListItem(&linkedList,&itemC,(LinkedListCompare)ListItemCompare);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->current);
-    TEST_ASSERT_EQUAL(2,outList->count);
-    outputListItem=getCurrentListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outputListItem);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemA,outputListItem);
-    TEST_ASSERT_NULL(outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
-    TEST_ASSERT_NULL(outputListItem);
-
-}
-
-/*
-*    linkedList -> itemC -> itemB -> itemA -> NULL
-*          ↓ delete itemA
-*    linkedList -> itemC -> itemB -> NULL
-*
-*/
-void test_List_deleteSelectedListItem_delete_last(void){
-    initList(&linkedList, &itemC ,&itemA ,3 ,&itemC);
-    initListItem(&itemA,NULL,(void*)&linkItemDataA);
-    initListItem(&itemB,&itemA,(void*)&linkItemDataB);
-    initListItem(&itemC,&itemB,(void*)&linkItemDataC);
-
-    outList=deleteSelectedListItem(&linkedList,&itemA,(LinkedListCompare)ListItemCompare);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->head);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outList->tail);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outList->current);
-    TEST_ASSERT_EQUAL(2,outList->count);
-    outputListItem=getCurrentListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemC,outputListItem);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
-    TEST_ASSERT_EQUAL_PTR(&itemB,outputListItem);
-    TEST_ASSERT_NULL(outputListItem->next);
-    outputListItem=getNextListItem(&linkedList);
-    TEST_ASSERT_NULL(outputListItem);
-
 }
 
 /*
@@ -631,4 +734,20 @@ void test_List_listForEach(void){
     printLinkSourceProcessor_Expect(&itemB);
     printLinkSourceProcessor_Expect(&itemA);
     listForEach(&linkedList,(Processor)printLinkSourceProcessor);
+}
+
+void test_List_listForEach_linked_is_NULL(void){
+    initList(&linkedList, &itemC ,&itemA ,3 ,&itemC);
+    initListItem(&itemA,NULL,(void*)&linkItemDataA);
+    initListItem(&itemB,&itemA,(void*)&linkItemDataB);
+    initListItem(&itemC,&itemB,(void*)&linkItemDataC);
+    listForEach(NULL,(Processor)printLinkSourceProcessor);
+}
+
+void test_List_listForEach_processor_NULL(void){
+    initList(&linkedList, &itemC ,&itemA ,3 ,&itemC);
+    initListItem(&itemA,NULL,(void*)&linkItemDataA);
+    initListItem(&itemB,&itemA,(void*)&linkItemDataB);
+    initListItem(&itemC,&itemB,(void*)&linkItemDataC);
+    listForEach(&linkedList,NULL);
 }
