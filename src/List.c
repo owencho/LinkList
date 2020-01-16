@@ -1,5 +1,4 @@
 #include "List.h"
-#include "LinkCompare.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
