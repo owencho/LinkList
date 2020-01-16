@@ -16,3 +16,8 @@ void test_List_LinkCompare_different_link(void){
     compareValue=linkCompare(&dataA,&dataB);
     TEST_ASSERT_EQUAL(0,compareValue);
 }
+
+void test_List_LinkCompare_both_NULL_link_same(void){
+    compareValue=linkCompare(NULL,NULL);
+    TEST_ASSERT_EQUAL(1,compareValue);
+}
