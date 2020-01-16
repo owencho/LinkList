@@ -166,7 +166,7 @@ ListItem * findListItem(List * linkedList,void * listItemData,LinkedListCompare 
     }
     return NULL;
 }
-void listForEach(List * linkedList,Processor processor){
+void listForEach(List * linkedList,LinkedListProcessor processor){
     ListItem * listItem;
     listItem = getCurrentListItem(linkedList);
     if(processor == NULL) return;

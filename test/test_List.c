@@ -5,7 +5,7 @@
 #include "ListItemCompare.h"
 #include "LinkedListCompare.h"
 #include "LinkCompare.h"
-#include "Processor.h"
+#include "LinkedListProcessor.h"
 #include "mock_ProcessorFunction.h"
 NetworkNode node;
 List linkedList;
@@ -733,7 +733,7 @@ void test_List_listForEach(void){
     printLinkSourceProcessor_Expect(&itemC);
     printLinkSourceProcessor_Expect(&itemB);
     printLinkSourceProcessor_Expect(&itemA);
-    listForEach(&linkedList,(Processor)printLinkSourceProcessor);
+    listForEach(&linkedList,(LinkedListProcessor)printLinkSourceProcessor);
 }
 
 void test_List_listForEach_linked_is_NULL(void){
@@ -741,7 +741,7 @@ void test_List_listForEach_linked_is_NULL(void){
     initListItem(&itemA,NULL,(void*)&linkItemDataA);
     initListItem(&itemB,&itemA,(void*)&linkItemDataB);
     initListItem(&itemC,&itemB,(void*)&linkItemDataC);
-    listForEach(NULL,(Processor)printLinkSourceProcessor);
+    listForEach(NULL,(LinkedListProcessor)printLinkSourceProcessor);
 }
 
 void test_List_listForEach_processor_NULL(void){

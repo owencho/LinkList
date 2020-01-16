@@ -2,7 +2,7 @@
 #define _LIST_H
 #include "ListItem.h"
 #include "LinkedListCompare.h"
-#include "Processor.h"
+#include "LinkedListProcessor.h"
 #include <stdlib.h>
 typedef struct List List ;
 
@@ -25,7 +25,7 @@ ListItem * findListItem(List * linkedList,void * listItemData,LinkedListCompare 
 void * deleteHeadListItem(List * linkedList);
 void * deleteSelectedListItem(List * linkedList,void  * listItemData,LinkedListCompare compare);
 void * checkAndDeleteListItem(List * linkedList,ListItem * deleteListItem);
-void listForEach(List *linkedList,Processor processor);
+void listForEach(List *linkedList,LinkedListProcessor processor);
 
 #define freeList(list)                                      \
                           do{if(list) free(list);}while(0)
