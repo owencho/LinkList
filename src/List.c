@@ -22,7 +22,8 @@ ListItem *createListItem(void* data){
 }
 
 void resetCurrentListItem(List * linkedList){
-    if(linkedList == NULL) return ;
+    if(linkedList == NULL)
+        return ;
     linkedList->current = linkedList->head;
     linkedList->previous = NULL;
 }
