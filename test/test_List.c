@@ -385,6 +385,69 @@ void test_List_listAddItemToHead(void){
 
 
 }
+/*
+*   linkedList -> itemA -> NULL
+*          ↓ add itemB after A
+*    linkedList -> itemA -> itemB -> NULL
+*          ↓ add itemC
+*    linkedList -> itemA -> itemB -> itemC -> NULL
+*/
+void test_List_listAddItemToNext_addC(void){
+    initList(&linkedList, &itemA ,&itemA ,1 ,&itemA);
+    initListItem(&itemB,NULL,(void*)&linkItemDataB);
+    initListItem(&itemA,NULL,(void*)&linkItemDataA);
+    initListItem(&itemC,NULL,(void*)&linkItemDataC);
+    //linkedList add itemB
+    // head and current points to itemA
+    // tail now points to itemB
+    // count = 2 as 2 item inside
+    outList=listAddItemToNext(&linkedList,&itemA,(void*)&linkItemDataB);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
+    TEST_ASSERT_NULL(outList->previous);
+    TEST_ASSERT_EQUAL(2,outList->count);
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataB);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
+
+    outList=listAddItemToNext(&linkedList,&itemA,(void*)&linkItemDataC);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->head->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataB,outList->tail->data);
+    TEST_ASSERT_EQUAL_PTR(&linkItemDataA,outList->current->data);
+    TEST_ASSERT_NULL(outList->previous);
+    TEST_ASSERT_EQUAL(3,outList->count);
+    outputListItem= getCurrentListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataA);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataC);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_EQUAL_PTR(outputListItem->data,&linkItemDataB);
+    outputListItem= getNextListItem(outList);
+    TEST_ASSERT_NULL(outputListItem);
+    resetCurrentListItem(outList);
+}
+
+void test_List_listAddItemToNext_NULL(void){
+  initList(&linkedList, &itemA ,&itemA ,1 ,&itemA);
+  initListItem(&itemB,NULL,(void*)&linkItemDataB);
+  initListItem(&itemA,NULL,(void*)&linkItemDataA);
+  initListItem(&itemC,NULL,(void*)&linkItemDataC);
+  //linkedList add itemB
+  // head and current points to itemA
+  // tail now points to itemB
+  // count = 2 as 2 item inside
+  outList=listAddItemToNext(NULL,&itemA,(void*)&linkItemDataB);
+  TEST_ASSERT_NULL(outList);
+  outList=listAddItemToNext(&linkedList,NULL,(void*)&linkItemDataC);
+  TEST_ASSERT_EQUAL_PTR(&linkedList,outList);
+  outList=listAddItemToNext(&linkedList,&itemA,NULL);
+  TEST_ASSERT_EQUAL_PTR(&linkedList,outList);
+}
 // test for deleteHeadListItem
 /*
 *    linkedList -> itemA -> itemB -> NULL

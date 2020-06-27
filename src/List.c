@@ -88,6 +88,20 @@ List* listAddItemToHead(List * linkedList, void * data ){
     return linkedList;
 }
 
+List* listAddItemToNext(List * linkedList, ListItem * listItem,void * data ){
+    ListItem * newListItem ;
+    if(linkedList == NULL || listItem== NULL || data == NULL)
+        return linkedList;
+    newListItem = createListItem(data);
+    newListItem->next = listItem->next;
+    listItem->next = newListItem;
+    if(listItem == linkedList->tail)
+        linkedList->tail = newListItem;
+    linkedList->count++;
+    resetCurrentListItem(linkedList);
+    return linkedList;
+}
+
 void * deleteHeadListItem(List * linkedList){
     ListItem * nextListItem;
     ListItem * deletedListItem;

@@ -22,6 +22,7 @@ ListItem * getNextListItem(List * linkedList);
 List*  listAddItemToHead(List * linkedList, void * data );
 List*  listAddItemToTail(List * linkedList, void * data );
 ListItem * findListItem(List * linkedList,void * listItemData,LinkedListCompare compare );
+List* listAddItemToNext(List * linkedList, ListItem * listItem,void * data );
 void * deleteHeadListItem(List * linkedList);
 void * deleteSelectedListItem(List * linkedList,void  * listItemData,LinkedListCompare compare);
 void * checkAndDeleteListItem(List * linkedList,ListItem * deleteListItem);
